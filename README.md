@@ -1,5 +1,6 @@
 HIFI/HIPE Batch processing framework.
-Written by Colin Borys, borys@caltech.edu
+Written by Colin Borys, colin.borys@gmail.com
+
 **********************************************
 The Herschel Interactive Processing Environment (HIPE) is a data analysis package written in Java, scriptable with Python, and developed using an Agile philosophy.  
 It is tailored for the large data volume collected by the Herschel Space Telescope.  The software is an international collaboration with >100 contributors.  
@@ -14,7 +15,7 @@ http://segsfault.com/blog/?p=1
 A MySQL database is used to keep track of obsids to process, and can optionally be used to store the output of a analysis.
 Other SQL variants can be used with appropriate modifications to the codebase.
 
-example usage:
+# example usage:
 1. Setup a new job where ALL obsids will be processed:
 BatchProcess.py testRun new
 
@@ -48,7 +49,7 @@ Result: using the 'hostfile', the script will spawn the BatchProcess.py 'run' co
 
 
 
-PREQUISITES:
+## PREQUISITES:
 For all computers that will execute a script, the following needs to be installed:
 
 1. The mysql-connector jar file must be installed as part of the classpath.
@@ -63,69 +64,70 @@ For all computers that will execute a script, the following needs to be installe
    - http://herschel.esac.esa.int/HIPE_download.shtml
 
 
-A NOTE ON DIRECTORIES:
+## A NOTE ON DIRECTORIES:
 The code was setup assuming the following:
 
 A 'root' directory where the executables and output from jobs is stored.
 This needs to be defined as an environment variable (see below)
 
 In my particular setup, I have the following:
-HIPE_BATCH_ROOT/
-   bin/
-      BatchProcess.py
-      BatchProcess_mpi.sh
-      batch.cfg
-      batchUtility.py
-      hostfile
-      readme.txt    
-   jobs/
-      testRun/
-         testRun.py
-         log/
-         output/
-   lib/
-      mysql-connector-java-5.1.22-bin.jar
+    HIPE_BATCH_ROOT/
+       bin/
+          BatchProcess.py
+          BatchProcess_mpi.sh
+          batch.cfg
+          batchUtility.py
+          hostfile
+          readme.txt    
+       jobs/
+          testRun/
+             testRun.py
+             log/
+             output/
+       lib/
+          mysql-connector-java-5.1.22-bin.jar
 
-ENVIRONMENT VARIABLES:
+### ENVIRONMENT VARIABLES:
 here is a BASH version of my setup:
 
-export HIPE_BATCH_ROOT=/hifi/batchProcessing/
-# setup mysql/jython class file.
-mysqljar=$HIPE_BATCH_ROOT/lib/mysql-connector-java-5.1.22-bin.jar
-if [ -z $CLASSPATH ]; then
-   export CLASSPATH=$mysqljar 
-else
-   export CLASSPATH=$mysqljar:${CLASSPATH}
-fi
-unset mysqljar
-
-export PATH=$HIPE_BATCH_ROOT/bin:$PATH
-
+    export HIPE_BATCH_ROOT=/hifi/batchProcessing/
+    # setup mysql/jython class file.
+    mysqljar=$HIPE_BATCH_ROOT/lib/mysql-connector-java-5.1.22-bin.jar
+    if [ -z $CLASSPATH ]; then
+       export CLASSPATH=$mysqljar 
+    else
+       export CLASSPATH=$mysqljar:${CLASSPATH}
+    fi
+    unset mysqljar
+    export PATH=$HIPE_BATCH_ROOT/bin:$PATH
 
 
-The batch.cfg configuration file:
 
-[sql]
-host      = mysqlserver.mydomain.edu
-user      = hipeuser
-pswd      = sqlpasswd
-db        = blkr
-table     = v11_1
+### The batch.cfg configuration file:
+
+    [sql]
+    host      = mysqlserver.mydomain.edu
+    user      = hipeuser
+    pswd      = sqlpasswd
+    db        = blkr
+    table     = v11_1
      
 The config file 'table' should refer to the master SQL table where all obsids are stored.
 
-The hostfile (for openMPI execution).  In this example, 15 HIPE sessions will be run simultaneously
 
-#Example host file for OpenMPI processing.
+### The hostfile (for openMPI execution).
+In this example, 15 HIPE sessions will be run simultaneously
 
-# Run 2 HIPEs on the local machine:
-localhost slots=2 max_slots=2
+    #Example host file for OpenMPI processing.
 
-# Run 10 instances on a remote high-compute server (30 cores):
-myremote1.ipac.caltech.edu slots=10 max_slots=10
-
-# Run 3 instances on a remote quad-core computer:
-myremote1.ipac.caltech.edu slots=3 max_slots=3
+    # Run 2 HIPEs on the local machine:
+    localhost slots=2 max_slots=2
+    
+    # Run 10 instances on a remote high-compute server (30 cores):
+    myremote1.ipac.caltech.edu slots=10 max_slots=10
+    
+    # Run 3 instances on a remote quad-core computer:
+    myremote1.ipac.caltech.edu slots=3 max_slots=3
 
 
 Finally, an SQL dump of the complete list of HIFI observations is provided.  It is 
