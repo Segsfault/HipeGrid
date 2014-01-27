@@ -1,0 +1,11 @@
+# Example host file for OpenMPI processing.
+#
+
+# Run 2 HIPEs on the local machine:
+localhost slots=2 max_slots=2
+
+# Run 10 instances on a remote high-compute server (30 cores):
+myremote1.ipac.caltech.edu slots=10 max_slots=10
+
+# Run 3 instances on a remote quad-core computer:
+myremote1.ipac.caltech.edu slots=3 max_slots=3
